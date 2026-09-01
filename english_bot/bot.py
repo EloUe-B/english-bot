@@ -24,6 +24,7 @@ _file_handler = logging.handlers.RotatingFileHandler(
     encoding="utf-8",
 )
 _file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+_file_handler.setLevel(logging.WARNING)
 logging.getLogger().addHandler(_file_handler)
 logger = logging.getLogger(__name__)
 
