@@ -13,6 +13,7 @@ sys.modules["dotenv"] = dotenv_stub
 
 genai_client_stub = types.ModuleType("google.genai.client")
 genai_client_stub.Client = MagicMock()
+genai_client_stub.BaseApiClient = MagicMock()
 genai_client_stub.AsyncClient = MagicMock()
 sys.modules["google.genai.client"] = genai_client_stub
 

@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 from google.genai import types
-from google.genai.client import AsyncClient, Client
+from google.genai.client import AsyncClient, BaseApiClient
 
 from .exceptions import AIError, ConfigError
 
@@ -15,7 +15,7 @@ MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 if not GEMINI_API_KEY:
     raise ConfigError("GEMINI_API_KEY не задан в .env")
 
-_client = AsyncClient(api_client=Client(api_key=GEMINI_API_KEY))
+_client = AsyncClient(api_client=BaseApiClient(api_key=GEMINI_API_KEY))
 
 
 SYSTEM_PROMPT = (
