@@ -54,6 +54,30 @@ SYSTEM_PROMPT = (
 )
 
 
+TEACHER_PROMPT = (
+    "Ты — опытный преподаватель английского языка. "
+    "Пользователь задаёт тебе вопрос. Отвечай подробно, "
+    "с примерами, переводом, пояснениями. Отвечай на русском языке. "
+    "Длина ответа — до 3500 символов."
+)
+
+
+async def ask_teacher(text: str) -> str:
+    """Send text to Gemini and return a detailed teacher answer."""
+    chat = _client.chats.create(
+        model=MODEL_NAME,
+        config=types.GenerateContentConfig(
+            system_instruction=TEACHER_PROMPT,
+        ),
+    )
+    try:
+        response = await chat.send_message(text)
+    except Exception as exc:
+        raise AIError(f"Gemini API error: {exc}") from exc
+
+    return response.text.strip()
+
+
 async def evaluate(text: str) -> dict:
     """Send text to Gemini and return structured analysis as a dict."""
     prompt = "Проанализируй сообщение и верни JSON:\n" + text

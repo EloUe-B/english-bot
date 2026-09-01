@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from telegram import ReactionTypeEmoji, Update
 from telegram.ext import Application, ContextTypes, MessageHandler, filters
 
-from .ai import evaluate
+from .ai import ask_teacher, evaluate
 from .exceptions import AIError, ConfigError
 
 load_dotenv()
@@ -46,8 +46,19 @@ async def handle_message(
     if not message or not message.text:
         return
 
+    text = message.text.strip()
+    if text.upper().startswith("SAM,"):
+        query = text[4:].strip()
+        if query:
+            try:
+                reply = await ask_teacher(query)
+                await message.reply_text(reply)
+            except AIError as exc:
+                logger.error("Ошибка AI: %s", exc)
+        return
+
     try:
-        result = await evaluate(message.text)
+        result = await evaluate(text)
     except AIError as exc:
         logger.error("Ошибка AI: %s", exc)
         return

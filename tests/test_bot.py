@@ -83,3 +83,48 @@ def test_level_reactions_keys():
     for emoji in bot.LEVEL_REACTIONS.values():
         assert isinstance(emoji, str)
         assert len(emoji) > 0
+
+
+@pytest.mark.asyncio
+@patch.object(bot, "ask_teacher", return_value="Подробный ответ учителя")
+async def test_handle_message_sam_prefix(mock_teacher):
+    update, msg = _make_update("SAM,как сказать 'я люблю книги'?")
+    await bot.handle_message(update, None)
+    mock_teacher.assert_awaited_once_with("как сказать 'я люблю книги'?")
+    msg.reply_text.assert_awaited_once_with("Подробный ответ учителя")
+    msg.set_reaction.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@patch.object(bot, "ask_teacher", return_value="Ответ")
+async def test_handle_message_sam_any_register(mock_teacher):
+    update, msg = _make_update("sam,привет")
+    await bot.handle_message(update, None)
+    mock_teacher.assert_awaited_once_with("привет")
+
+
+@pytest.mark.asyncio
+@patch.object(bot, "evaluate")
+async def test_handle_message_sam_empty_query(mock_eval):
+    update, msg = _make_update("SAM,")
+    await bot.handle_message(update, None)
+    mock_eval.assert_not_called()
+    msg.reply_text.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@patch.object(bot, "ask_teacher", side_effect=AIError("API error"))
+async def test_handle_message_sam_ai_error(mock_teacher):
+    update, msg = _make_update("SAM,вопрос")
+    await bot.handle_message(update, None)
+    msg.reply_text.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@patch.object(bot, "ask_teacher")
+@patch.object(bot, "evaluate")
+async def test_handle_message_sam_skips_evaluate(mock_eval, mock_teacher):
+    update, msg = _make_update("SAM,тест")
+    await bot.handle_message(update, None)
+    mock_teacher.assert_awaited_once()
+    mock_eval.assert_not_called()

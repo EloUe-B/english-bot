@@ -76,3 +76,16 @@ async def test_evaluate_invalid_json():
             assert False, "Should raise"
         except (json.JSONDecodeError, ValueError):
             pass
+
+
+async def test_ask_teacher():
+    mock_chat = await _mock_chat(
+        "Привет! Вот подробный ответ на твой вопрос..."
+    )
+
+    with patch.object(ai._client.chats, "create", return_value=mock_chat):
+        result = await ai.ask_teacher("Как сказать 'я люблю книги'?")
+
+    assert isinstance(result, str)
+    assert len(result) > 0
+    mock_chat.send_message.assert_awaited_once()
