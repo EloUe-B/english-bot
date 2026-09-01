@@ -10,7 +10,6 @@ from ai import evaluate
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-CHAT_TOKEN = os.getenv("CHAT_TOKEN")
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -28,23 +27,11 @@ LEVEL_REACTIONS = {
 }
 
 
-def _is_target_chat(update: Update) -> bool:
-    chat = update.effective_chat
-    if chat is None:
-        return False
-    if not CHAT_TOKEN:
-        return True
-    return str(chat.id) == str(CHAT_TOKEN)
-
-
 async def handle_message(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
     message = update.effective_message
     if not message or not message.text:
-        return
-
-    if not _is_target_chat(update):
         return
 
     try:

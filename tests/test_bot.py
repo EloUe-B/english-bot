@@ -77,24 +77,6 @@ async def test_handle_message_ai_error(mock_eval):
     msg.reply_text.assert_not_awaited()
 
 
-@patch.object(bot, "CHAT_TOKEN", "42")
-def test_is_target_chat_matching():
-    update, _ = _make_update(chat_id="42")
-    assert bot._is_target_chat(update) is True
-
-
-@patch.object(bot, "CHAT_TOKEN", "42")
-def test_is_target_chat_wrong():
-    update, _ = _make_update(chat_id="99")
-    assert bot._is_target_chat(update) is False
-
-
-@patch.object(bot, "CHAT_TOKEN", "")
-def test_is_target_chat_no_filter():
-    update, _ = _make_update(chat_id="any")
-    assert bot._is_target_chat(update) is True
-
-
 def test_level_reactions_keys():
     assert set(bot.LEVEL_REACTIONS.keys()) == {1, 2, 3, 4, 5, 6}
     for emoji in bot.LEVEL_REACTIONS.values():
