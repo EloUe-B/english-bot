@@ -33,8 +33,10 @@ Telegram-бот, который помогает практиковать анг
 
 ## Запуск в Docker
 
+`docker-compose.yml` только локальный (не в git). Сначала скопируй пример и поправь ссылку на образ в DockerHub под свой аккаунт:
+
 ```
-docker compose build
+cp docker-compose.example.yml docker-compose.yml
 docker compose up -d
 ```
 
@@ -49,7 +51,7 @@ docker compose up -d
 Git и исходники на сервере не нужны — деплой работает только через готовый образ.
 
 1. Создай папку `DEPLOY_PATH` на сервере.
-2. Положи в неё `docker-compose.yml` (из этого репозитория) и `.env`:
+2. Скопируй `docker-compose.example.yml` (из этого репозитория) как `docker-compose.yml` и добавь `.env`:
    ```
    BOT_TOKEN=токен_от_botfather
    GEMINI_API_KEY=ключ_gemini

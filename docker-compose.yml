@@ -1,5 +1,0 @@
-services:
-  bot:
-    image: eloue1/english-bot:latest
-    restart: unless-stopped
-    env_file: .env

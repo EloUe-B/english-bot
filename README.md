@@ -33,8 +33,10 @@ A Telegram bot that helps you practice English right in the chat: it assesses yo
 
 ## Run in Docker
 
+`docker-compose.yml` is local-only (not tracked). Copy the example first and fix the DockerHub image link to your own account:
+
 ```
-docker compose build
+cp docker-compose.example.yml docker-compose.yml
 docker compose up -d
 ```
 
@@ -49,7 +51,7 @@ Required secrets: `DOCKER_USERNAME`, `DOCKER_PASSWORD` (DockerHub), `DEPLOY_HOST
 Git and source code are not needed on the server — deployment works only through the ready-made image.
 
 1. Create the `DEPLOY_PATH` folder on the server.
-2. Put `docker-compose.yml` (from this repository) and `.env` into it:
+2. Copy `docker-compose.example.yml` (from this repository) as `docker-compose.yml` and add `.env`:
    ```
    BOT_TOKEN=your_botfather_token
    GEMINI_API_KEY=your_gemini_key

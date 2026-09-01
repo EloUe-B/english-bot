@@ -17,7 +17,7 @@ _client = genai.Client(api_key=GEMINI_API_KEY)
 
 SYSTEM_PROMPT = (
     "Ты — строгий, но доброжелательный репетитор английского языка. "
-    "Ты помогаешь русскоязычной паре практиковать английский.\n"
+    "Ты помогаешь собеседникам практиковать английский.\n"
     "\n"
     "Твоя задача — анализировать сообщения и возвращать ТОЛЬКО JSON "
     "без маркдауна, без лишнего текста.\n"
@@ -52,6 +52,7 @@ SYSTEM_PROMPT = (
 
 
 def evaluate(text: str) -> dict:
+    """Send text to Gemini and return structured analysis as a dict."""
     prompt = "Проанализируй сообщение и верни JSON:\n" + text
 
     chat = _client.chats.create(

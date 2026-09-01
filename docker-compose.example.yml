@@ -1,0 +1,6 @@
+# Copy to docker-compose.yml and fill in your image name and .env
+services:
+  bot:
+    image: YOUR_DOCKERHUB_USER/english-bot:latest
+    restart: unless-stopped
+    env_file: .env

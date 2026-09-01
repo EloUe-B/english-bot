@@ -30,6 +30,7 @@ LEVEL_REACTIONS = {
 async def handle_message(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
+    """Process text messages: evaluate English or translate Russian."""
     message = update.effective_message
     if not message or not message.text:
         return
@@ -69,6 +70,7 @@ async def handle_message(
 
 
 def main() -> None:
+    """Build and run the Telegram bot polling loop."""
     if not BOT_TOKEN:
         raise RuntimeError("BOT_TOKEN не задан в .env")
 
