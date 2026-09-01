@@ -42,7 +42,7 @@ docker compose up -d
 
 ## CI/CD
 
-При пуше в `main` GitHub Actions прогоняет flake8 и pytest, собирает и пушит Docker-образ `eloue1/english-bot` на DockerHub, затем деплоит на сервер по SSH (`docker compose pull` + `up -d --force-recreate`) и отправляет уведомление об успехе в Telegram.
+При пуше в `main` GitHub Actions прогоняет flake8 и pytest, собирает и пушит Docker-образ `<your nickname>/english-bot` на DockerHub, затем деплоит на сервер по SSH (`docker compose pull` + `up -d --force-recreate`) и отправляет уведомление об успехе в Telegram.
 
 Нужные секреты: `DOCKER_USERNAME`, `DOCKER_PASSWORD` (DockerHub), `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PASSWORD`, `DEPLOY_PATH` (сервер), `TELEGRAM_TOKEN`, `TELEGRAM_TO` (уведомления). Подробнее — `.github/workflows/ci.yml`.
 
