@@ -7,3 +7,4 @@ tests
 *.pyc
 pytest.ini
 .pytest_cache
+logs

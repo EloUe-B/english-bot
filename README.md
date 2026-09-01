@@ -29,7 +29,7 @@ A Telegram bot that helps you practice English right in the chat: it assesses yo
    ```
 
 4. Install dependencies: `pip install -r requirements.txt`
-5. Run: `python bot.py`
+5. Run: `python -m english_bot.bot`
 
 ## Run in Docker
 
@@ -75,11 +75,13 @@ Done — the bot will start assessing English messages, fixing mistakes, and tra
 - Every call to `ai.evaluate()` creates a new chat session — the bot has no memory between messages.
 - In groups the bot needs permission to set reactions (see above).
 - If the bot doesn't respond, make sure it's an admin and that `.env` on the server has valid `BOT_TOKEN` and `GEMINI_API_KEY`.
+- Logs: `logs/bot.log` (rotating, 1 MB × 3).
 
 ## How It Works
 
-- `bot.py` — Telegram logic (messages, reactions, replies).
-- `ai.py` — Gemini call: `ai.evaluate() -> dict` (level, errors, correction, explanation, translation).
+- `english_bot/bot.py` — Telegram logic (messages, reactions, replies).
+- `english_bot/ai.py` — Gemini call: `ai.evaluate() -> dict` (level, errors, correction, explanation, translation).
+- `english_bot/exceptions.py` — custom exceptions (`ConfigError`, `AIError`).
 
 ---
 

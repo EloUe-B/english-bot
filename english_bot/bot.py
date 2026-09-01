@@ -1,20 +1,30 @@
 import logging
+import logging.handlers
 import os
 
 from dotenv import load_dotenv
 from telegram import ReactionTypeEmoji, Update
 from telegram.ext import Application, ContextTypes, MessageHandler, filters
 
-from ai import evaluate
+from .ai import evaluate
+from .exceptions import AIError, ConfigError
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
+LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+os.makedirs("logs", exist_ok=True)
+logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+_file_handler = logging.handlers.RotatingFileHandler(
+    os.path.join("logs", "bot.log"),
+    maxBytes=1_000_000,
+    backupCount=3,
+    encoding="utf-8",
 )
+_file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+logging.getLogger().addHandler(_file_handler)
 logger = logging.getLogger(__name__)
 
 LEVEL_REACTIONS = {
@@ -36,8 +46,8 @@ async def handle_message(
         return
 
     try:
-        result = evaluate(message.text)
-    except Exception as exc:
+        result = await evaluate(message.text)
+    except AIError as exc:
         logger.error("Ошибка AI: %s", exc)
         return
 
@@ -72,7 +82,7 @@ async def handle_message(
 def main() -> None:
     """Build and run the Telegram bot polling loop."""
     if not BOT_TOKEN:
-        raise RuntimeError("BOT_TOKEN не задан в .env")
+        raise ConfigError("BOT_TOKEN не задан в .env")
 
     app = Application.builder().token(BOT_TOKEN).build()
     handler = MessageHandler(

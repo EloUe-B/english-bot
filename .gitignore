@@ -4,5 +4,6 @@ AGENTS.md
 __pycache__/
 .mypy_cache/
 *.pyc
+logs/
 docker-compose.yml
 

@@ -4,3 +4,5 @@ services:
     image: YOUR_DOCKERHUB_USER/english-bot:latest
     restart: unless-stopped
     env_file: .env
+    volumes:
+      - ./logs:/app/logs

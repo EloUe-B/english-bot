@@ -1,8 +1,11 @@
+import json
 import os
 
 from dotenv import load_dotenv
-from google import genai
 from google.genai import types
+from google.genai.client import AsyncClient, Client
+
+from .exceptions import AIError, ConfigError
 
 load_dotenv()
 
@@ -10,9 +13,9 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
 if not GEMINI_API_KEY:
-    raise RuntimeError("GEMINI_API_KEY не задан в .env")
+    raise ConfigError("GEMINI_API_KEY не задан в .env")
 
-_client = genai.Client(api_key=GEMINI_API_KEY)
+_client = AsyncClient(api_client=Client(api_key=GEMINI_API_KEY))
 
 
 SYSTEM_PROMPT = (
@@ -51,7 +54,7 @@ SYSTEM_PROMPT = (
 )
 
 
-def evaluate(text: str) -> dict:
+async def evaluate(text: str) -> dict:
     """Send text to Gemini and return structured analysis as a dict."""
     prompt = "Проанализируй сообщение и верни JSON:\n" + text
 
@@ -62,8 +65,9 @@ def evaluate(text: str) -> dict:
             response_mime_type="application/json",
         ),
     )
-    response = chat.send_message(prompt)
-
-    import json
+    try:
+        response = await chat.send_message(prompt)
+    except Exception as exc:
+        raise AIError(f"Gemini API error: {exc}") from exc
 
     return json.loads(response.text.strip())

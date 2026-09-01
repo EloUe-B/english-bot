@@ -2,7 +2,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-import bot
+import english_bot.bot as bot
+from english_bot.exceptions import AIError
 
 
 def _make_update(text=None, chat_id="123"):
@@ -70,7 +71,7 @@ async def test_handle_message_english_incorrect(mock_eval):
 
 
 @pytest.mark.asyncio
-@patch.object(bot, "evaluate", side_effect=RuntimeError("API error"))
+@patch.object(bot, "evaluate", side_effect=AIError("API error"))
 async def test_handle_message_ai_error(mock_eval):
     update, msg = _make_update("Hello!")
     await bot.handle_message(update, None)
