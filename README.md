@@ -42,7 +42,7 @@ docker compose up -d
 
 ## CI/CD
 
-On every push to `main`, GitHub Actions runs flake8 and pytest, builds and pushes the Docker image `eloue1/english-bot` to DockerHub, then deploys to the server over SSH (`docker compose pull` + `up -d --force-recreate`) and sends a success notification to Telegram.
+On every push to `main`, GitHub Actions runs flake8 and pytest, builds and pushes the Docker image `<your nickname>/english-bot` to DockerHub, then deploys to the server over SSH (`docker compose pull` + `up -d --force-recreate`) and sends a success notification to Telegram.
 
 Required secrets: `DOCKER_USERNAME`, `DOCKER_PASSWORD` (DockerHub), `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PASSWORD`, `DEPLOY_PATH` (server), `TELEGRAM_TOKEN`, `TELEGRAM_TO` (notifications). See `.github/workflows/ci.yml` for details.
 
